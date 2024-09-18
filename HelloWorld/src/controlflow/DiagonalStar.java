@@ -1,3 +1,5 @@
+package controlflow;
+
 public class DiagonalStar {
 
     private static final String STAR = "*";
