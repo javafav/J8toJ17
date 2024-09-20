@@ -1,4 +1,4 @@
-package methods;
+package ifelse;
 
 public class LeapYear {
 

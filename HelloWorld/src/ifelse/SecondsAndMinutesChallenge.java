@@ -1,4 +1,4 @@
-package methods;
+package ifelse;
 
 public class SecondsAndMinutesChallenge {
     public static void main(String[] args) {
