@@ -1,23 +1,29 @@
 package oop.inheritance;
 
-import java.util.Date;
-
-public class SalariedEmployee extends  Employee{
+public class SalariedEmployee extends Employee {
     private double annulSalary;
-    boolean isRetired;
+    private boolean isRetired;
 
-    public SalariedEmployee(){}
+    public SalariedEmployee() {
+    }
 
-    public SalariedEmployee(String name, String birthDate, String endDate, long employeeId, String hireDate, double annulSalary, boolean isRetired) {
-        super(name, birthDate, endDate, employeeId, hireDate);
+    public SalariedEmployee(String name, String birthDate, String hireDate, double annulSalary) {
+        super(name, birthDate,  hireDate);
         this.annulSalary = annulSalary;
         this.isRetired = isRetired;
     }
 
-    public void retire(){
-        Date hireDate = new Date(super.hireDate);
-        Date endDate = new Date(super.endDate);
+    @Override
+    public double collectPay() {
+        double payCheck =  annulSalary / 26;
+        double adjustedPay = (isRetired) ? 0.9 * payCheck : payCheck;
+    return (int) adjustedPay;
+    }
 
-        Date month = endDate - hireDate;
+    public void retire() {
+        terminate("01/01/2022");
+        isRetired = true;
+
+
     }
 }
