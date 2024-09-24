@@ -1,4 +1,4 @@
 package oop.composition;
 
-public class CofeeMaker {
-}
+//public class CofeeMaker {
+//}
