@@ -2,7 +2,7 @@ package oop.generics;
 
 import java.util.Random;
 
-public class Student {
+public class Student implements QueryItem {
     private String name;
 
     private String course;
@@ -29,6 +29,19 @@ public class Student {
 
     public int getYearStarted() {
         return yearStarted;
+    }
+
+    @Override
+    public boolean matchFieldValue(String fieldName, String fieldValue) {
+        String fName = fieldName.toUpperCase();
+
+        return switch (fName){
+           case "NAME" -> name.equalsIgnoreCase(fieldValue);
+            case "COURSE" -> course.equalsIgnoreCase(fieldValue);
+            case "YEARSTARTED" -> yearStarted == (Integer.parseInt(fieldValue));
+
+            default -> false;
+        };
     }
 }
 

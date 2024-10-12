@@ -26,6 +26,12 @@ public class StudentTest {
 
         printStudent(lpaStudents);
 
+        var queryList = new QueryList<LpaStudent>(lpaStudents);
+        var matches = queryList.getMatches(
+                "Course", "Java"
+        );
+        printStudent(matches);
+
     }
     public static void printStudent(List<? extends Student> students){
         for(var student : students){
