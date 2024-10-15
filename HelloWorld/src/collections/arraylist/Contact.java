@@ -1,4 +1,4 @@
-package collections;
+package collections.arraylist;
 
 public class Contact {
     private String name;

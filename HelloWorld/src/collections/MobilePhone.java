@@ -1,4 +1,6 @@
 package collections;
+import collections.arraylist.Contact;
+
 import java.util.ArrayList;
 
 public class MobilePhone {
