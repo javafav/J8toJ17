@@ -60,7 +60,7 @@ public record Card(Suit suit, String face, int rank) {
         if(description != null){
             System.out.println(description);
         }
-        int cardInRow = deck.size() / 4;
+        int cardInRow = deck.size() / rows;
         for(int i = 0; i < rows; i++){
             int startIndex = i * cardInRow;
             int endIndex = startIndex + cardInRow;
