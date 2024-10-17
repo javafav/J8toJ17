@@ -38,5 +38,31 @@ public class CardDemo {
         Collections.reverse(cards);
         Card.printDeck(cards, "Shuffled Cards that are Reversed", 4);
 
+        var sortingAlgorithm = Comparator.comparing(Card::rank).thenComparing(Card::suit);
+        Collections.sort(deck, sortingAlgorithm);
+        Card.printDeck(deck, "Standard Deck sorted by rank, suit", 13);
+
+        Collections.reverse(deck);
+        Card.printDeck(deck, "Standard Deck sorted by rank, suit is reverse", 13);
+
+        List<Card> kings = deck.subList(4,8);
+        Card.printDeck(kings, "Just King Deck", 1);
+
+        List<Card> tens = deck.subList(16,20);
+        Card.printDeck(tens, "Just King Deck", 1);
+
+        int subListIndex = Collections.indexOfSubList(deck, tens);
+        int subListLastIndex = Collections.lastIndexOfSubList( tens, deck);
+        System.out.println("sublist index of tens = " + subListIndex);
+        System.out.println("sublist last index of tens = " + subListLastIndex);
+        System.out.println("Contains= " + deck.containsAll(tens));
+
+        Card.cardsInPlayerHand(deck,4);
+
+     List<Card> cards1 = Card.shuffleCardsToPlayTheGame(deck, 14);
+
+     Card.printDeck(cards1, "Just Random Deck", 4);
+
+
     }
 }
