@@ -7,7 +7,9 @@ import java.util.Scanner;
 
 public class ContactData {
     private static final String phoneData = """
-                        Charlie Brown, 3334445555
+                        Marry Anna, 778143411
+                        Abdul Salam ,  3001234567
+                        Charlie Brown, 33344455
                         Maid Marion, 1234567890
                         Mickey Mouse, 9998887777
                         Mickey Mouse, 1247489758
@@ -16,6 +18,7 @@ public class ContactData {
                         Robin Hood, 7899028222
                         Lucy Van Pelt, 5642086852
                         Mickey Mouse, 9998887777
+                        Jack Ma, 456871134
             """;
 
     private static final String emailData = """
@@ -25,6 +28,9 @@ public class ContactData {
                         Robin Hood, rhood@gmail.com
                         Linus Van Pelt, lvpelt2015@gmail.com
                         Daffy Duck, daffy@google.com
+                        Marry Anna, marry@yahoo.com
+                        Abdul Salam, sany@live.com
+                        Fahad Fara, fara@demogpt.com
             
             """;
 
@@ -49,4 +55,5 @@ public class ContactData {
 
 
     }
+
 }

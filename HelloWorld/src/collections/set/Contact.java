@@ -23,13 +23,13 @@ public class Contact {
 
     public Contact(String name, String email, long phone) {
         this.name = name;
-        if(email != null){
+        if (email != null) {
             emails.add(email);
         }
 
-        if(phone > 0){
+        if (phone > 0) {
             String p = String.valueOf(phone);
-            p = "(%s) %s-%s".formatted(p.substring(0,3), p.substring(3,6), p.substring(6));
+            p = "(%s) %s-%s".formatted(p.substring(0, 3), p.substring(3, 6), p.substring(6));
             phones.add(p);
         }
     }
@@ -43,14 +43,46 @@ public class Contact {
         return "%s: %s %s".formatted(name, emails, phones);
     }
 
-    public Contact mergeContactData(Contact contact){
+    public Contact mergeContactData(Contact contact) {
         Contact newContact = new Contact(this.name);
-        newContact.emails = this.emails;
-        newContact.phones = this.phones;
+        newContact.emails = new HashSet<>(this.emails);
+        newContact.phones = new HashSet<>(this.phones);
 
         newContact.emails.addAll(contact.emails);
         newContact.phones.addAll(contact.phones);
 
         return newContact;
+    }
+
+    public void addEmail(String companyName){
+        String[] names = name.split(" ");
+        String email = "%c%s@%s.com".formatted(name.charAt(0), names[names.length-1], companyName.replaceAll(" ", "").toLowerCase());
+        if(!emails.add(email)){
+            System.out.println(name + " already has email "+ email);
+        }else {
+            System.out.println(name + " now has email "+ email);
+        }
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Contact contact = (Contact) o;
+        return getName().equals(contact.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * getName().hashCode();
+    }
+
+    public void replaceEmail(String oldEmail, String newEmail){
+        if(emails.contains(oldEmail)){
+            emails.remove(oldEmail);
+            emails.add(newEmail);
+        }
     }
 }
