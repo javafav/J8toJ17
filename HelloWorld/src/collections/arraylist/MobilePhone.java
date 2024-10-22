@@ -1,5 +1,4 @@
-package collections;
-import collections.arraylist.Contact;
+package collections.arraylist;
 
 import java.util.ArrayList;
 
