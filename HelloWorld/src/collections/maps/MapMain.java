@@ -79,7 +79,7 @@ public class MapMain {
 
         System.out.println("-------------------------------------");
         for(String contactName : new String[]{"Daisy Malik", "Daffy Duck", "Scrooge McDuck"}){
-            contacts.computeIfAbsent(contactName, k -> new Contact(k));
+            contacts.computeIfAbsent(contactName, Contact::new);
         }
 
         contacts.forEach((k, v) -> System.out.println("Key =   " + k + " Value = " + v));
@@ -87,13 +87,17 @@ public class MapMain {
 
 
         System.out.println("-------------------------------------");
-        for(String contactName : new String[]{"Daisy Malik", "Daffy Duck", "Scrooge McDuck"}){
+        for(String contactName : new String[]{"Daisy Duck", "Daffy Duck", "Scrooge McDuck"}){
             contacts.computeIfPresent(contactName, (k, v) -> {
                 v.addEmail("Fun Place");
                 return v; });
         }
 
         contacts.forEach((k, v) -> System.out.println("Key =   " + k + " Value = " + v));
+
+        System.out.println("-------------------------------------");
+
+
 
     }
 

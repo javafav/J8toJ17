@@ -7,51 +7,44 @@ import java.util.Scanner;
 
 public class ContactData {
     private static final String phoneData = """
-                        Marry Anna, 778143411
-                        Abdul Salam ,  3001234567
-                        Charlie Brown, 33344455
-                        Maid Marion, 1234567890
-                        Mickey Mouse, 9998887777
-                        Mickey Mouse, 1247489758
-                        Minnie Mouse, 4567805666
-                        Robin Hood, 5647893000
-                        Robin Hood, 7899028222
-                        Lucy Van Pelt, 5642086852
-                        Mickey Mouse, 9998887777
-                        Jack Ma, 456871134
+                                   Charlie Brown, 3334445555
+                                   Maid Marion, 1234567890
+                                   Mickey Mouse, 9998887777
+                                   Mickey Mouse, 1247489758
+                                   Minnie Mouse, 4567805666
+                                   Robin Hood, 5647893000
+                                   Robin Hood, 7899028222
+                                   Lucy Van Pelt, 5642086852
+                                   Mickey Mouse, 9998887777
             """;
 
     private static final String emailData = """
-                        Mickey Mouse, mckmouse@gmail.com
-                        Mickey Mouse, micky1@aws.com
-                        Minnie Mouse, minnie@verizon.net
-                        Robin Hood, rhood@gmail.com
-                        Linus Van Pelt, lvpelt2015@gmail.com
-                        Daffy Duck, daffy@google.com
-                        Marry Anna, marry@yahoo.com
-                        Abdul Salam, sany@live.com
-                        Fahad Fara, fara@demogpt.com
+                               Mickey Mouse, mckmouse@gmail.com
+                               Mickey Mouse, micky1@aws.com
+                               Minnie Mouse, minnie@verizon.net
+                               Robin Hood, rhood@gmail.com
+                               Linus Van Pelt, lvpelt2015@gmail.com
+                               Daffy Duck, daffy@google.com
             
             """;
 
 
-    public static List<Contact> getData(String type){
+    public static List<Contact> getData(String type) {
         List<Contact> dataList = new ArrayList<>();
 
         Scanner scanner = new Scanner(type.equals("phone") ? phoneData : emailData);
-        while (scanner.hasNext()){
+        while (scanner.hasNext()) {
             String[] data = scanner.nextLine().split(",");
             Arrays.asList(data).replaceAll(String::trim);
-            if(type.equals("phone")){
+            if (type.equals("phone")) {
                 dataList.add(new Contact(data[0], Long.parseLong(data[1])));
-            } else if (type.equals("email")){
+            } else if (type.equals("email")) {
                 dataList.add(new Contact(data[0], data[1]));
             }
 
         }
 
         return dataList;
-
 
 
     }
