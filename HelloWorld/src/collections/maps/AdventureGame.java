@@ -89,7 +89,7 @@ public class AdventureGame {
             """;
 
     private enum Compass {
-        N(" ↑ "), S(" ↓ "), E(" → "), W(" ← ");
+        E(" ↑ "), N(" ← "), S(" → "), W(  " ↓ " );
         private final String symbol;
 
         Compass (String symbol) {
