@@ -1,0 +1,5 @@
+package collections.maps;
+
+public enum Category {
+    PRODUCE, DAIRY, CEREAL, MEAT, BEVERAGE
+}
