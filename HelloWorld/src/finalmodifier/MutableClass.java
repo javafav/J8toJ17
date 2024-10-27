@@ -1,6 +1,6 @@
 package finalmodifier;
 
-public class ImmutableClass {
+public class MutableClass {
     public static void main(String[] args) {
 
 //        Person jane = new Person();
@@ -31,6 +31,11 @@ public class ImmutableClass {
         kids[0] = jim;
         System.out.println(john);
 
+        kids = null;
+        System.out.println(john);
+
+        john.setKids(kids);
+        System.out.println(john);
 
 
 
