@@ -1,4 +1,4 @@
-package collections.cardgame;
+package collections.arraylist;
 
 public class Account {
     public enum AccountTYpe{
