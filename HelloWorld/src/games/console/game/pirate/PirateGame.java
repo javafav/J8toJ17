@@ -1,7 +1,7 @@
-package dev.lpa.pirate;
+package games.console.game.pirate;
 
-import dev.lpa.game.Game;
-import dev.lpa.game.GameAction;
+import games.console.game.Game;
+import games.console.game.GameAction;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

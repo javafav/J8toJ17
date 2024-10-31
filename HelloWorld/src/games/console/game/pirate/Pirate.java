@@ -1,6 +1,7 @@
-package dev.lpa.pirate;
+package games.console.game.pirate;
 
-import dev.lpa.game.Player;
+
+import games.console.game.Player;
 
 import java.util.*;
 

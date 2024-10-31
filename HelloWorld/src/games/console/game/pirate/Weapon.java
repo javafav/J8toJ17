@@ -35,11 +35,10 @@ public enum Weapon {
         return values()[0];
     }
 
-    public List<Weapon> getWeaponsByLevel(int levelOfPlayer){
-        List<Weapon> weapons = new ArrayList<>(EnumSet.of());
-        for()
+    public static List<Weapon> getWeaponsByLevel(int levelOfPlayer){
+     List<Weapon> weapons = new ArrayList<>(EnumSet.allOf(Weapon.class));
+     weapons.removeIf(w -> (w.minLevel > levelOfPlayer));
 
-        return weapons;
-
+     return weapons;
     }
 }

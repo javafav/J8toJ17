@@ -1,16 +1,25 @@
 package games.console;
 
 
-import dev.lpa.game.ShooterGame;
-import games.console.game.GameConsole;
+import games.console.game.pirate.Pirate;
+import games.console.game.pirate.Weapon;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        var console = new GameConsole<>(new ShooterGame("The Shootout Game"));
+//        var console = new GameConsole<>(new ShooterGame("The Shootout Game"));
+//
+//        int playerIndex = console.addPlayer();
+//        console.playGame(playerIndex);
 
-        int playerIndex = console.addPlayer();
-        console.playGame(playerIndex);
+        Weapon weapon = Weapon.getWeaponByChar('P');
+        System.out.println("weapons = " + weapon + ", hitPoints =  " + weapon.getHitPoint() + ", minLevel " + weapon.getMinLevel());
+
+        var list = Weapon.getWeaponsByLevel(0);
+        list.forEach(System.out::println);
+
+        Pirate tim = new Pirate("Tim");
+        System.out.println(tim);
     }
 }
