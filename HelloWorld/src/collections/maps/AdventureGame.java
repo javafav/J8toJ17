@@ -185,7 +185,7 @@ public class AdventureGame {
             lastPlace = location;
             visit(next);
         }else {
-            System.out.println(location + " is an ivalid location");
+            System.out.println(location + " is an invalid location");
         }
     }
 }
