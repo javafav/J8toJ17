@@ -4,12 +4,16 @@ import java.util.concurrent.TimeUnit;
 
 public class MultipleThreads {
     public static void main(String[] args) {
-        StopWatch stopWatch = new StopWatch(TimeUnit.SECONDS);
-        Thread green = new Thread(stopWatch::countDown, ThreadColor.ANSI_YELLOW.name());  // here the countDown method reference is target for run function
-                                                                                         //  Thread green = new Thread( () -> stopWatch.countDown(), ThreadColor.ANSI_YELLOW.name());
-        Thread purple = new Thread( () -> stopWatch.countDown(7),
-                  ThreadColor.ANSI_PURPLE.name());
-        Thread red = new Thread(stopWatch::countDown, ThreadColor.ANSI_RED.name());  // here the countDown method reference is target for run function
+        StopWatch greenstopWatch = new StopWatch(TimeUnit.SECONDS);
+        StopWatch redstopWatch = new StopWatch(TimeUnit.SECONDS);
+        StopWatch purplestopWatch = new StopWatch(TimeUnit.SECONDS);
+        Thread green = new Thread(greenstopWatch::countDown, ThreadColor.ANSI_YELLOW.name());  // here the countDown method reference is target for run function
+        //  Thread green = new Thread( () -> stopWatch.countDown(), ThreadColor.ANSI_YELLOW.name());
+        Thread purple = new Thread(() -> purplestopWatch.countDown(7),
+                ThreadColor.ANSI_PURPLE.name());
+        Thread red = new Thread(redstopWatch::countDown, ThreadColor.ANSI_RED.name());  // here the countDown method reference is target for run function
+
+
         green.start();
         purple.start();
 
@@ -41,7 +45,7 @@ class StopWatch {
             System.out.println("Bad Color Name!!!");
         }
         String color = threadColor.color();
-        for ( i = unitCount; i > 0; i--) {
+        for (i = unitCount; i > 0; i--) {
             try {
                 timeUnit.sleep(1);
             } catch (InterruptedException e) {
