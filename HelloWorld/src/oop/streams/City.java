@@ -55,7 +55,7 @@ class City {
         //Find the country with the highest total population (sum of all city populations).
 
         Optional<Map.Entry<String, Integer>> entry = cities.stream().collect(Collectors.groupingBy(City::getCountry, Collectors.summingInt(City::getPopulation))).entrySet().stream()
-                .max(Map.Entry.comparingByValue()).orElseThrow( () -> new RuntimeException("not data found"));
+                .max(Map.Entry.comparingByValue());
 
 
     }
