@@ -1,26 +1,39 @@
 package threads;
 
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 class MessageRepository {
     private String message;
     private boolean hasMessage = false;
+    private   final Lock lock = new ReentrantLock();
 
-    public synchronized String read() {
+    public  String read() {
         while (!hasMessage) {
-
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         hasMessage = false;
+        notify();
         return message;
     }
 
     public synchronized void write(String message) {
         while (hasMessage) {
-
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         hasMessage = true;
         this.message = message;
+        notify();
     }
 }
 
@@ -82,6 +95,23 @@ public class ConsumerProducer {
         MessageRepository messageRepository = new MessageRepository();
         Thread reader = new Thread(new MessageReader(messageRepository) );
         Thread writer = new Thread(new MessageWriter(messageRepository) );
+
+        writer.setUncaughtExceptionHandler((thread, exc) -> {
+            System.out.println("Writer had exception: " + exc);
+            if(reader.isAlive()){
+                System.out.println("Going to interrupt the reader");
+                reader.interrupt();
+            }
+        });
+
+        reader.setUncaughtExceptionHandler((thread, exc) -> {
+            System.out.println("Reader had exception: " + exc);
+            if(writer.isAlive()){
+                System.out.println("Going to interrupt the writer");
+                writer.interrupt();
+            }
+        });
+
         reader.start();
         writer.start();
     }
