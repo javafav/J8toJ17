@@ -7,6 +7,10 @@ import java.util.function.BinaryOperator;
 
 class ColorThreadFactory implements ThreadFactory {
     private String threadName;
+    private int colorValue = 1;
+
+    public ColorThreadFactory() {
+    }
 
     public ColorThreadFactory(ThreadColor color) {
         this.threadName = color.name();
@@ -15,13 +19,30 @@ class ColorThreadFactory implements ThreadFactory {
     @Override
     public Thread newThread(Runnable r) {
         Thread thread = new Thread(r);
-        thread.setName(threadName);
+        String name = threadName;
+        if(name == null){
+            name = ThreadColor.values()[colorValue].name();
+        }
+        if(++colorValue > (ThreadColor.values().length - 1)){
+            colorValue =1;
+        }
+        thread.setName(name);
         return thread;
     }
 }
 
 public class ExecutorsDemo {
     public static void main(String[] args) {
+        int count = 6;
+        var multiExecutor = Executors.newFixedThreadPool(3, new ColorThreadFactory());
+        for (int i = 0; i < count; i++) {
+            multiExecutor.execute(ExecutorsDemo::countDown);
+
+        }
+        multiExecutor.shutdown();
+    }
+
+    public static void singlemain(String[] args) {
         var blueExecutor = Executors.newSingleThreadExecutor(
                 new ColorThreadFactory(ThreadColor.ANSI_BLUE)
         );
@@ -30,11 +51,11 @@ public class ExecutorsDemo {
 
         boolean isDone = false;
         try {
-           isDone =  blueExecutor.awaitTermination(500, TimeUnit.MILLISECONDS);
+            isDone = blueExecutor.awaitTermination(500, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        if(isDone){
+        if (isDone) {
             System.out.println("Blue finished, starting Yellow");
             var yellowExecutor = Executors.newSingleThreadExecutor(
                     new ColorThreadFactory(ThreadColor.ANSI_YELLOW)
@@ -47,7 +68,7 @@ public class ExecutorsDemo {
                 throw new RuntimeException(e);
             }
 
-            if(isDone){
+            if (isDone) {
                 System.out.println("Yellow finished, starting Red");
                 var redExecutor = Executors.newSingleThreadExecutor(
                         new ColorThreadFactory(ThreadColor.ANSI_RED)
@@ -55,11 +76,11 @@ public class ExecutorsDemo {
                 redExecutor.execute(ExecutorsDemo::countDown);
                 redExecutor.shutdown();
                 try {
-                  isDone =   redExecutor.awaitTermination(500, TimeUnit.MILLISECONDS);
+                    isDone = redExecutor.awaitTermination(500, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                if(isDone){
+                if (isDone) {
                     System.out.println("All process completed");
                 }
             }
