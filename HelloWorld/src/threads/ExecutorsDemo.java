@@ -1,8 +1,7 @@
 package threads;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.concurrent.*;
 import java.util.function.BinaryOperator;
 
 class ColorThreadFactory implements ThreadFactory {
@@ -20,11 +19,11 @@ class ColorThreadFactory implements ThreadFactory {
     public Thread newThread(Runnable r) {
         Thread thread = new Thread(r);
         String name = threadName;
-        if(name == null){
+        if (name == null) {
             name = ThreadColor.values()[colorValue].name();
         }
-        if(++colorValue > (ThreadColor.values().length - 1)){
-            colorValue =1;
+        if (++colorValue > (ThreadColor.values().length - 1)) {
+            colorValue = 1;
         }
         thread.setName(name);
         return thread;
@@ -32,7 +31,76 @@ class ColorThreadFactory implements ThreadFactory {
 }
 
 public class ExecutorsDemo {
+
     public static void main(String[] args) {
+        var multiExecutor = Executors.newCachedThreadPool();
+
+        List<Callable<Integer>> taskList = List.of(
+                () -> ExecutorsDemo.sum(1, 10, 1, "red"),
+                () -> ExecutorsDemo.sum(10, 100, 10, "green"),
+                () -> ExecutorsDemo.sum(2, 20, 2, "yellow"));
+
+
+        try {
+            var results = multiExecutor.invokeAll(taskList);
+            for (var result : results) {
+                System.out.println(result.get(500, TimeUnit.SECONDS));
+            }
+        } catch (InterruptedException | TimeoutException | ExecutionException e) {
+
+        } finally {
+            multiExecutor.shutdown();
+        }
+
+
+    }
+
+    public static void cachemain(String[] args) {
+        var multiExecutor = Executors.newCachedThreadPool();
+
+        try {
+            var redValue = multiExecutor.submit(() ->
+                    ExecutorsDemo.sum(1, 10, 1, "red"));// return sum of the number from 1, 10
+            var blueValue = multiExecutor.submit(() ->
+                    ExecutorsDemo.sum(10, 100, 10, "blue"));
+            var greenValue = multiExecutor.submit(() ->
+                    ExecutorsDemo.sum(100, 1000, 50, "green"));
+
+            try {
+                System.out.println(redValue.get(7000, TimeUnit.SECONDS));
+                System.out.println(blueValue.get(1000, TimeUnit.SECONDS));
+                System.out.println(greenValue.get(3000, TimeUnit.SECONDS));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+//            multiExecutor.execute(() ->
+//                    ExecutorsDemo.sum(1,10,1,"yellow")) ;
+//            multiExecutor.execute(() ->
+//                    ExecutorsDemo.sum(10,100,10,"cyan"));
+//            multiExecutor.execute(() ->
+//                    ExecutorsDemo.sum(100,1000,50,"purple"));
+//
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//            System.out.println("Next task will be executed");
+//            String[] colors = {"red", "green", "yellow", "cyan"};
+//            for(String color: colors){
+//                multiExecutor.execute( () -> ExecutorsDemo.sum(1,10,1,color));
+//            }
+
+        } finally {
+            multiExecutor.shutdown();
+        }
+
+
+    }
+
+
+    public static void fixedmain(String[] args) {
         int count = 6;
         var multiExecutor = Executors.newFixedThreadPool(3, new ColorThreadFactory());
         for (int i = 0; i < count; i++) {
@@ -140,5 +208,22 @@ public class ExecutorsDemo {
 
         }
 
+    }
+
+    private static int sum(int start, int end, int delta, String colorString) {
+        var threadColor = ThreadColor.ANSI_RESET;
+        try {
+            threadColor = ThreadColor.valueOf("ANSI_" + colorString.toUpperCase());
+        } catch (IllegalArgumentException ignore) {
+            //user may pass bad color name , Will ignore this error
+        }
+        String color = threadColor.color();
+        int sum = 0;
+        for (int i = start; i <= end; i += delta) {
+            sum += i;
+
+        }
+        //System.out.println(color + Thread.currentThread().getName() + ", " + colorString + " " + sum);
+        return sum;
     }
 }
