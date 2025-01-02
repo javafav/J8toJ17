@@ -44,7 +44,7 @@ public class SchedulingTask {
             try{
                 TimeUnit.SECONDS.sleep(3);
                 System.out.println("a " + ZonedDateTime.now().format(dtf));
-            } catch (InterruptedException e) {
+             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         };
