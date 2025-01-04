@@ -2,32 +2,15 @@ package oop.streams;
 
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-record Person(String firstName, String lastName, int age) {
 
-    private final static String[] firsts =
-            {"Able", "Bob", "Charlie", "Donna", "Eve", "Fred"};
-    private final static String[] lasts =
-            {"Norton", "OHara", "Petersen", "Quincy", "Richardson", "Smith"};
 
-    private final static Random random = new Random();
-
-    public Person() {
-        this(firsts[random.nextInt(firsts.length)],
-                lasts[random.nextInt(lasts.length)],
-                random.nextInt(18, 100));
-    }
-
-    @Override
-    public String toString() {
-        return "%s, %s (%d)".formatted(lastName, firstName, age);
-    }
-}
-
-public class ParallelStreamsAndMore {
+public class ParallelStreamsAndMoreDemo {
     public static void main(String[] args) {
         var persons = Stream.generate(Person::new)
                 .limit(10)
@@ -76,19 +59,36 @@ public class ParallelStreamsAndMore {
 
         Map<String, Long> lastNameCount = Stream.generate(Person::new)
                 .limit(10000)
-                .parallel()
-                .collect(Collectors.groupingBy(
+                .collect(Collectors.groupingByConcurrent(
                         Person::lastName,
-                        Collectors.counting()) ) ;
+                        Collectors.counting()));
 
         lastNameCount.entrySet().forEach(System.out::println);
 
-        long total =0;
-        for(long count : lastNameCount.values()){
+        long total = 0;
+        for (long count : lastNameCount.values()) {
             total += count;
         }
         System.out.println("Total person: " + total);
 
+        System.out.println(lastNameCount.getClass().getName());
+        var lastsCount =Collections.synchronizedMap(    // another way to maintain the order new ConcurrentSkipListMap<String, Long>();
+                new TreeMap<String, Long>());
+
+        Stream.generate(Person::new)
+                .limit(10000)
+                .parallel()
+                .forEach(person -> lastsCount.merge(person.lastName(), 1L, Long::sum) );
+
+        System.out.println(lastsCount);
+
+        total = 0;
+        for (long count : lastsCount.values()) {
+            total += count;
+        }
+        System.out.println("Total person: " + total);
+
+        System.out.println(lastsCount.getClass().getName());
 
 
 
