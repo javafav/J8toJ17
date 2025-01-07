@@ -12,12 +12,14 @@ import java.util.List;
 public class FileException {
     public static void main(String[] args) {
 
+
+
+        String fileName = "/files/name.csv";
+
+
+        File file = new File(new File(""),fileName);
+        System.out.println(file.getAbsolutePath());
         System.out.println("Current working directory (cwd) " + new File("").getAbsolutePath());
-
-        String fileName = "files/name.csv";
-
-
-        File file = new File(fileName);
 
         if (!file.exists()) {
             System.out.println("I can't run unless the file exists");
@@ -29,6 +31,17 @@ public class FileException {
         for(File f : File.listRoots()){
             System.out.println(f);
         }
+
+
+        Path path = Paths.get("files/name.csv");
+
+        if (!Files.exists(path)) {
+            System.out.println("2 .I can't run unless the file exists");
+            // System.out.println("Quiting Application. go figure it out");
+            return;
+        }
+        System.out.println("2 .I'm good to go");
+
 
     }
 
@@ -69,7 +82,7 @@ public class FileException {
         catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
-            System.out.println("Something unrealted and unexpected happened");
+            System.out.println("Something unrelated and unexpected happened");
         } finally {
             System.out.println("Maybe I'd log something either way...");
         }
