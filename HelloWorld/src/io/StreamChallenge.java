@@ -1,5 +1,6 @@
 package io;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
@@ -11,12 +12,14 @@ public class StreamChallenge {
         try(var paths = Files.walk(startingPath, Integer.MAX_VALUE)){
             paths
                     .filter(Files::isRegularFile)
-                    .collect(Collectors.groupingBy(p -> p.subpath(index, index + 1))),
-                    Collectors.summarizingLong(
-                            (p -> {
-
-                            })
-                    )
+                    .collect(Collectors.groupingBy(p -> p.subpath(index, index + 1)));
+//                    Collectors.summarizingLong(
+//                            (p -> {
+//
+//                            })
+//                    )
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
