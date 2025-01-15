@@ -1,10 +1,12 @@
 package io;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 public class FileAndPath {
     public static void main(String[] args) {
@@ -74,6 +76,37 @@ public class FileAndPath {
 
             } catch (IOException e) {
                 System.out.println("Some thing went wrong");
+            }
+        }
+    }
+
+    public static class FileReadingChallenge {
+        public static void main(String[] args) {
+            try (BufferedReader br = new BufferedReader(new FileReader("files/article.txt"))) {
+                //   System.out.printf("[%d] number of lines in file%n", br.lines().count());
+                Pattern pattern = Pattern.compile("\\p{javaWhitespace}+");
+    //
+    //            System.out.printf("[%d] word in file",           // counts the words in a file
+    //                    br.lines()
+    //                            .flatMap(pattern::splitAsStream).count());
+
+
+    //            System.out.printf("[%d] word in file",           // counts the words in a file
+    //                    br.lines().flatMap( line -> Arrays.stream(line.split(pattern.pattern()))).count());
+
+
+    //            System.out.printf("[%d] word in file",           // counts the words in a file
+    //                    br.lines().map(line -> line.matches(pattern.pattern())).count());
+
+                System.out.printf("[%d] word in file",           // counts the words in a file
+                br.lines()
+                        .mapToLong(line -> line.split(pattern.toString()).length)
+                        .sum());
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+
             }
         }
     }
