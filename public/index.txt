@@ -1,0 +1,7 @@
+Directory Content: 
+C:\J8toJ17\public
+C:\J8toJ17\public\assets
+C:\J8toJ17\public\assets\icon
+C:\J8toJ17\public\assets\icon\txt_files_log.txt
+C:\J8toJ17\public\index.txt
+Generated: 2025-01-20T15:45:42.666092900
