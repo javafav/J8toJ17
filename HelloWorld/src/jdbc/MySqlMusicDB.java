@@ -1,15 +1,13 @@
 package jdbc;
 
-import com.mysql.cj.MysqlConnection;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import javax.swing.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-public class MySqlMusic {
+public class MySqlMusicDB {
     private final static String CONN_STRING = "jdbc:mysql://localhost:3306/music";
 
 
