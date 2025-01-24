@@ -1,12 +1,13 @@
 package jdbc;
 
 import java.sql.*;
+import java.util.Arrays;
 
 public class MusicDML {
     public static void main(String[] args) {
 
         try (Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/music",
+                "jdbc:mysql://localhost:3306/music?continueBatchOnError=false",
                 System.getenv("MYSQL_USER"),
                 System.getenv("MYSQL_PASS"));
              Statement statement = connection.createStatement()) {
@@ -26,11 +27,18 @@ public class MusicDML {
 //                System.out.println("Maybe we should add this record");
 //                insertRecord(statement, tableName, new String[]{columnName}, new String[]{columnValue}); // declare and initialize String at same point
 
-           insertArtistAlbum(statement, columnName, columnValue);
+                insertArtistAlbum(statement, columnValue, columnValue);
             } else {
                 // deleteRecord(statement, tableName, columnName, columnValue);
-                updateRecord(statement, tableName, columnName, columnValue,
-                        columnName, columnValue.toUpperCase());
+//                updateRecord(statement, tableName, columnName, columnValue,
+//                        columnName, columnValue.toUpperCase());
+                try {
+                    deleteArtistAlbum(connection, statement, columnName, columnValue);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+executeSelect(statement, "music.albumview", "album_name", columnValue);
+                executeSelect(statement, "music.albums ", "album_name", columnValue);
             }
 
 
@@ -125,7 +133,7 @@ public class MusicDML {
 
 
     private static void insertArtistAlbum(Statement statement, String artistName,
-                                             String albumName) throws SQLException {
+                                          String albumName) throws SQLException {
         String artistInsert = "INSERT INTO music.artists (artist_name) VALUES (%s)"
                 .formatted(statement.enquoteLiteral(artistName));
         System.out.println(artistInsert);
@@ -163,6 +171,44 @@ public class MusicDML {
         }
         executeSelect(statement, "music.albumview", "album_name",
                 "Bob Dylan");
+
+    }
+
+    private static void deleteArtistAlbum(Connection conn, Statement statement,
+                                          String artistName, String albumName) throws SQLException {
+       try{
+           System.out.println("AUTOCOMMIT = " + conn.getAutoCommit());
+           conn.setAutoCommit(false);
+           String deleteSongs = """
+                DELETE FROM music.songs WHERE album_id = 
+                (SELECT album_id FROM music.albums WHERE album_name = '%s')""".formatted(albumName);
+
+//           int deletedSongs = statement.executeUpdate(deleteSongs);
+//           System.out.printf("Deleted %d songs from music.songs%n", deletedSongs);
+
+           String deleteAlbums = "DELETE FROM music.albums WHERE album_name = 'f m%s'".formatted(albumName);
+//           int deletedAlbums = statement.executeUpdate(deleteAlbums);
+//           System.out.printf("Deleted %d albums from music.albums%n",deletedAlbums);
+
+           String deleteArtist = "DELETE FROM music.artists WHERE artist_name = '%s'".formatted(albumName);
+//           int deletedArtist = statement.executeUpdate(deleteArtist);
+//           System.out.printf("Deleted %d artists from music.albums%n",deletedArtist);
+
+           statement.addBatch(deleteSongs);
+           statement.addBatch(deleteAlbums);
+           statement.addBatch(deleteArtist);
+
+           int[] results = statement.executeBatch();
+           System.out.println(Arrays.toString(results));
+
+
+           conn.commit();
+       }catch(SQLException e){
+           e.printStackTrace();
+           conn.rollback();
+       }
+
+        conn.setAutoCommit(true);
 
     }
 
