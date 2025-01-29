@@ -1,5 +1,6 @@
 package jdbc;
 
+
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ public class MusicCallableStatement {
     private static final int ARTIST_COLUMN = 0;
     private static final int ALBUM_COLUMN = 1;
     private static final int SONG_COLUMN = 3;
+    private static final int TRACK_COLUMN = 2;
 
 
     public static void main(String[] args) {
@@ -23,6 +25,7 @@ public class MusicCallableStatement {
         try(var lines = Files.lines(Path.of("files/NewAlbums.csv"))) {
             albums = lines.map(s -> s.split(","))
                     .collect(Collectors.groupingBy(s -> s[ARTIST_COLUMN],
+
                             Collectors.groupingBy(s -> s[ALBUM_COLUMN],
                                     Collectors.mapping(s -> s[SONG_COLUMN],
                                             Collectors.joining(
@@ -50,7 +53,7 @@ public class MusicCallableStatement {
         try (Connection conn = datasource.getConnection(System.getenv("MYSQL_USER"),
                 System.getenv("MYSQL_PASS"))) {
 
-            CallableStatement cs = conn.prepareCall(
+      /*      CallableStatement cs = conn.prepareCall(
                     "CALL music.addAlbumInOutCounts(?,?,?,?)");
 
             albums.forEach((artist, albumMap) -> {
@@ -67,13 +70,30 @@ public class MusicCallableStatement {
                         System.err.println(e.getErrorCode() + " " + e.getMessage());
                     }
                 });
-            });
+            });  */
+
             String sql = "SELECT * FROM music.albumview WHERE artist_name = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, "Bob Dylan");
             ResultSet rs = ps.executeQuery();
             printRecords(rs);
+            CallableStatement csf = (CallableStatement) conn.prepareCall(
+                    "{ ? = CALL music.calcA lbumLength(?) } " );
 
+csf.registerOutParameter(1, Types.DOUBLE);
+albums.forEach((artist, albumMap) -> {
+    albumMap.keySet().forEach((albumName) -> {
+        try{
+            csf.setString(2, albumName);
+            csf.execute();
+            double result = csf.getDouble(1);
+            System.out.printf("Length of %s is %.1f%n", albumName, result);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    });
+});
 
 
         } catch (SQLException e) {
