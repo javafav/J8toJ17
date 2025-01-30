@@ -105,5 +105,20 @@ public class StreamChalleng1 {
                 .filter(n -> n % 2 == 0)
                 .mapToInt(Integer::intValue)
                 .sum();
+
+        //Convert a list of student names into a map where the key is the first letter of the name and the value is a list of names.
+        List<String> students = List.of("Alice", "Bob", "Charlie", "David", "Anna");
+
+     var result =   students.stream().collect(
+             Collectors.groupingBy(
+                     s -> s.charAt(0),
+                     Collectors.joining(" | ", "{", "}")
+             ));
+     result.forEach((k, v) -> System.out.println(k +" : " + v));
     }
+
+
+
+
+
 }

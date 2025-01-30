@@ -18,13 +18,13 @@ public class JPAProject {
             transaction.begin();
 
 
-            Artist artist = entityManager.find(Artist.class, 202);
+            Artist artist = entityManager.find(Artist.class, 103);
             System.out.println(artist);
 
-
-            artist.addAlbums("The Best of Muddy Water");
-
-            System.out.println(artist);
+//
+//            artist.addAlbums("The Best of Muddy Water");
+//
+//            System.out.println(artist);
 
 
 
