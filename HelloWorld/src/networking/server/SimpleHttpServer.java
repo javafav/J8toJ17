@@ -1,0 +1,85 @@
+package networking.server;
+
+import com.sun.net.httpserver.HttpServer;
+import org.w3c.dom.ls.LSOutput;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.net.HttpURLConnection.HTTP_OK;
+import static java.net.URLConnection.guessContentTypeFromName;
+
+public class SimpleHttpServer {
+    private static long visitorCount = 0;
+
+
+    public static void main(String[] args) {
+
+        try {
+            HttpServer server = HttpServer.create(new InetSocketAddress(8080),
+                    0);
+            server.createContext("/", exchange -> {
+                String requestMethod = exchange.getRequestMethod();
+                System.out.println("Server is listing on port 8080...");
+                System.out.println("Request Method: " + requestMethod);
+                String data = new String(exchange.getRequestBody().readAllBytes());
+
+                System.out.println("Body data: " + data);
+
+                Map<String, String> parameters = parseParameters(data);
+                System.out.println(parameters);
+                exchange.getRequestHeaders().entrySet().forEach(System.out::println);
+
+
+                if (requestMethod.equals("POST")) {
+                    ++visitorCount;
+                }
+                String firstName = parameters.get("first");
+                String lastName = parameters.get("last");
+                String response = """
+                        <html>
+                            <body>
+                                <h1>Hello World from My Http Server</h1>
+                                <p>Number of Visitors who signed up = %d<p>
+                                <form method="post">
+                                    <label for="first">First name:</label>
+                                    <input type="text" id="first" name="first" value="%s">
+                                    <br>
+                                    <label for="last">Last name:</label>
+                                    <input type="text" id="last" name="last" value="%s">
+                                    <br>
+                                    <input type="submit" value="Submit">
+                                </form>
+                            </body>
+                        </html>
+                        """.formatted(visitorCount,
+                        firstName == null ? "" : firstName,
+                        lastName == null ? "" : lastName);
+                var bytes = response.getBytes();
+                exchange.sendResponseHeaders(HTTP_OK, bytes.length);
+                exchange.getResponseBody().write(bytes);
+                exchange.close();
+
+            });
+
+
+            server.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Map<String, String> parseParameters(String requestBody) {
+        Map<String, String> parameters = new HashMap<>();
+        String[] pairs = requestBody.split("&");
+        for (String pair : pairs) {
+            String[] keyValue = pair.split("=");
+            if (keyValue.length == 2) {
+                parameters.put(keyValue[0], keyValue[1]);
+            }
+        }
+        return parameters;
+    }
+}
