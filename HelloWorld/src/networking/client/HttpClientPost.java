@@ -35,7 +35,7 @@ public class HttpClientPost {
                     HttpResponse.BodyHandlers.ofFile(Path.of("test.html")));
             if (response.statusCode() != HTTP_OK) {
                 System.out.println("Error reading web page: " + request.uri());
-                return;``````````````````````````````````````
+                return;
             }
 
 
