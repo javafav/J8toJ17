@@ -10,7 +10,6 @@
     <orderEntry type="library" name="mysql-connector-j-9.2.0" level="project" />
     <orderEntry type="library" name="hibernate.orm.core" level="project" />
     <orderEntry type="library" name="java.websocket.Java.WebSocket" level="project" />
-    <orderEntry type="library" name="junit" level="project" />
     <orderEntry type="module-library" scope="TEST">
       <library name="JUnit5.8.1">
         <CLASSES>
@@ -58,5 +57,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="junit" level="project" />
   </component>
 </module>
