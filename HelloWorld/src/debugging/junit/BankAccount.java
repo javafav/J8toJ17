@@ -12,11 +12,15 @@ public class BankAccount {
     }
 
     public double deposit(double amount, boolean branch){
+
         balance += amount;
         return balance;
     }
 
     public double withdraw(double amount, boolean branch){
+        if((amount > 500) && (!branch) ){
+            throw new IllegalArgumentException("Can't withdraw more then 500 from ATM! ");
+        }
         balance -= amount;
         return balance;
     }
